@@ -3,11 +3,13 @@
   //require('dotenv').config(); 
   
   
-  const sequelize = new Sequelize('proyectoot','root','',{
+  const sequelize = new Sequelize(development.database,development.username,development.password,{
       host:development.host,
       dialect:'mysql',
-      port: 3306,
+      port: development.port,
   })
+
+
   
   //Sync crea las tablas, FORECE:true ==> hace un drop tables
   //  sequelize.sync({ force: true}) NO USAR
