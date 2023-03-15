@@ -1,0 +1,96 @@
+
+<%- include('../common/header')%>
+
+<div class="container">
+  <div class="row">
+    <%- include('../common/aside')%>    
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Registro KKs</h2>
+        
+        <a href="/kks/" class="btn btn-md bg-primary-500 text-white">Volver a la lista</a>
+      
+      </div>
+<!-- Formulario de registro especialidad -->
+
+<div class="row justify-content-center">
+    <div class="col-md-12 align-self-center">
+      <% if(typeof msgError != 'undefined') { %>
+        
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+              <strong><%= msgError %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          
+        <% } %> 
+      
+        <form class="row g-3" action="/kks/nuevo" method="POST">
+                              
+            <div class="col-md-12">
+            <label for="inputAddress" class="form-label">Nombre KKs</label>
+            <input type="text" class="form-control" id="kks" name="kks" value="<% if(typeof valores != 'undefined') { %><%= valores.kks %><%}%>">
+            </div>
+            <div class="col-12">
+              <% if(typeof validaciones != 'undefined') { %>
+                  <% const msg = validaciones.find(val => val.param == "kks") %>
+                  <div style= "color:red" class="mb-2"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+              <%}%> 
+            </div>
+
+            <div class="col-md-12">
+              <label for="inputAddress" class="form-label">Pregunta(s) General*</label>
+              <textarea  id="general" name="general" placeholder="Ingrese las preguntas Genericas correspondientes a este KKS"><% if(typeof valores != 'undefined') { %><%= valores.general %><%}%></textarea>
+            </div>
+            <div class="col-12">
+              <% if(typeof validaciones != 'undefined') { %>
+                  <% const msg = validaciones.find(val => val.param == "general") %>
+                  <div style= "color:red" class="mb-2"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%>
+                  </div>
+              <%}%> 
+            </div>
+              
+            <div class="col-md-12">
+              <label for="inputAddress" class="form-label">Pregunta Especifica (Solo si aplica)</label>
+              <input type="text" placeholder="Grados, Presion, Temperatura" class="form-control" id="especifica" name="especifica" value="<% if(typeof valores != 'undefined') { %><%= valores.especifica %><%}%>">
+              </div>
+              <div class="col-12">
+                <% if(typeof validaciones != 'undefined') { %>
+                    <% const msg = validaciones.find(val => val.param == "especifica") %>
+                    <div style= "color:red" class="mb-2"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+                <%}%> 
+
+              </div>
+
+             
+
+            <button type="submit" class="btn bg-primary-500 text-white w-100">Registrar KKs</button>
+        </form><br>
+        
+    </div>
+</div>
+   
+
+    </main>
+  </div>
+  
+</div>
+<script>
+  $('#general').summernote({
+    placeholder: 'Ingrese los Detalles / Preguntas Generica',
+    tabsize: 2,
+    height: 120,
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      // ['table', ['table']],
+      // ['insert', ['link', 'picture', 'video']],
+      // ['view', ['fullscreen', 'codeview', 'help']]
+    ]
+  });
+</script>
+
+<%- include('../common/footer')%>
+

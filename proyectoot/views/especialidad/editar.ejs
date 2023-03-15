@@ -1,0 +1,63 @@
+
+<%- include('../common/header')%>
+
+<div class="container">
+  <div class="row">
+    <%- include('../common/aside')%>    
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Editar Especialidad </h2>
+        
+        <a href="/panel/especialidad" class="btn btn-md bg-primary-500 text-white">Volver a la lista</a>
+      
+      </div>
+<!-- Formulario de registro especialidad -->
+
+<div class="row justify-content-center">
+    <div class="col-md-12 align-self-center">
+      <% if(typeof msgError != 'undefined') { %>
+        
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+              <strong><%= msgError %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          
+        <% } %> 
+      
+        <!-- <% if(valores) {%> -->
+          <form class="row g-3" action="/panel/especialidades/actualizar" method="POST">
+              <div class="col-md-12">
+              <input hidden id="id" name="id" value="<%= valores.id %>">
+              <label for="inputAddress" class="form-label">Nombre Especialidad</label>
+              <input type="text"  class="form-control" id="especialidad" name="especialidad" value="<% if(typeof valores != 'undefined') { %><%= valores.especialidad %><%}%>">
+              </div>
+              <div class="col-12">
+                <% if(typeof validaciones != 'undefined') { %>
+                  <% const msg = validaciones.find(val => val.param == "especialidad") %>
+                  <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+                <%}%> 
+              <br>
+              <button type="submit" class="btn bg-primary-500 text-white w-100">Actualizar</button>
+              </div>
+          </form><br>
+          <!-- <% } %>  -->
+
+           
+
+            
+    </div>
+</div>
+   
+
+    </main>
+  </div>
+  
+</div>
+
+<script>
+  
+   
+</script>
+<%- include('../common/footer')%>
+

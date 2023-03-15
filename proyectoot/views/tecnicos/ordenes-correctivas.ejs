@@ -1,0 +1,174 @@
+<%- include('../common/header')%>
+%>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../common/asidetecnico')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1><%=title%></h1>
+      </div>
+      <% if(typeof msgok != 'undefined') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= msgok %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %> 
+      <table id="especialidad" class="table table-bordered table striped text-center mt-4">
+        <thead>
+          <tr class="bg-primary-500 text-white">
+            
+            <th scope="col">Supervisor</th>
+            <!-- <th scope="col">Tecnico</th> -->
+            <th scope="col">Kks</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Tarea</th>
+            <th scope="col">Estado</th>
+            <!-- <th scope="col">Duración(hrs)</th> -->
+            <th scope="col">Operaciones</th>
+          </tr>
+        </thead>
+      </table>
+    </main>
+  </div>
+</div>
+<!-- errorForm Modal -->
+<div class="modal fade" id="detailForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title " id="exampleModalLabel">Reporte OTC</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!------------------------ FORM ---------------------------->
+        <form class="row g-3 was-validated" name="confirmarerror" id="confirmarerror" action="/ot/reporteotc" method="POST">
+              <input hidden id="idotc" name="idotc" readonly>
+          <div class="">
+              <label for="message-text" class="col-form-label" >Detalle reporte:</label>
+              <textarea type="text" class="form-control" placeholder="Ingrese una descripcion del trabajo realizado" id="reporte" name="reporte" required></textarea>
+              <div class="invalid-feedback">Campo detalle obligatorio.</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $('#especialidad').DataTable({
+      responsive: true,
+        className: 'table-responsive',
+      // "ordering": false,   
+      order: [[2, 'desc']], 
+      language: {
+        url: '/json/es-ES.json'
+      },      
+      ajax:{
+        url:"/ot/ordenescjsontec",
+        dataSrc:""
+      },
+      columns:[
+        {data:"formularioot.ot.Supervisor.nombre"},
+        // {data:"formularioot.ot.Tecnico.nombre"},
+        {data:"formularioot.kk.kks"},
+        {data:null,
+          "render": function (data, type, row) {
+            
+
+            const fechaCreado = data.createdAt.slice(0, 19).replace('T',' ');
+            // return new Date(JSON.stringify(fechaCreado))
+               return fechaCreado;
+            },
+        },
+        {data:"tarea"},
+        {"data": null,
+         "render": function (data, type, row) {
+        
+                switch (data.estadotecnico) {
+                case 0:
+                    return  '<h6 class="text-primary">Pendiente</h6>';
+                case 1:
+                    return  '<h6 class="text-warning">Procesando...</h6>';
+                case 2:
+                    return  '<h6 class="text-success">Finalizado</h6>';
+                default:
+                    return "Error de estado-->"+data.estado;
+                }
+            },
+        },
+        // {"data": null,
+        //  "render": function (data, type, row) {
+        //         let datenow = new Date(Date.now()).toISOString().slice(0, 19);
+        //         var date1 = new Date(datenow);
+        //         switch (data.estadotecnico) {
+        //         case 0:
+        //             const creado = data.createdAt.slice(0, 19);
+        //             const date2 = new Date(creado);
+        //             const diff = date1.getTime() - date2.getTime();
+        //             const horas = diff / (1000 * 3600);
+        //             const horasRedondeado = Math.abs(Math.round(horas*100)/100);
+        //             const horaEsp = Math.trunc(horasRedondeado);
+        //             const decimalEsp = Math.abs(Math.round((horasRedondeado - horaEsp)*60));
+        //             return  horaEsp+":"+decimalEsp;
+        //         case 1:
+        //             return  '<h6 class="text-success">Concluido</h6>';
+        //         default:
+        //             return "Error de estado";
+        //         }
+        //     },
+        // },
+
+        {"data": null,
+            "render": function (data,type,row) { 
+              var idotc = row.id;
+            switch (data.estadotecnico) {
+            case (1):
+            return '<button type="button" onclick="reporte(\'' + idotc +'\');" class="btn btn-sm bg-succes-dark text-white">Reporte</button>'                           
+            break;
+            
+            case (2):
+            return 'Finalizado'                           
+            break;
+
+            default:
+            return '<button type="button" onclick="confirmar(\'' + idotc +'\');" class="btn btn-sm bg-succes-dark text-white">Iniciar</button>'                           
+              break;
+          }
+
+                
+                }
+        },
+      ]      
+    });
+});
+function confirmar(idotc){
+  Swal.fire({
+  title: "Iniciar",
+  text: "Desea iniciar esta OTC? Recordatorio: Por favor, asegúrate de llevar todos los implementos de seguridad necesarios.",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/ot/estado-correctivas/'+idotc;
+  }
+})
+}
+function reporte(idotc){
+    $("#idotc").val(idotc);
+    $('#detailForm').modal('show');
+}
+  
+var myModal = new bootstrap.Modal(document.getElementById('detailForm'));
+myModal.open();
+  </script>
+<%- include('../common/footer')%>
+

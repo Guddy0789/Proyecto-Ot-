@@ -1,0 +1,530 @@
+
+<%- include('../common/header')%>
+
+<div class="container-fluid" onload="myMsgFunc();">
+  <div class="row">
+    <%- include('../common/asidesupervisor')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1><%=title%></h1>
+        <!-- <button  type="button"  class="btn bg-primary-dark text-white pdf" data-bs-dismiss="alert" aria-label="Close">Exportar a PDF</button> -->
+      </div>
+      <!-- error cerrarot -->
+      <% if(typeof msgok != 'undefined') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= msgok %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      
+      <% } %> 
+      <!-- error cerrar ot -->
+      <% if(typeof kksmsgError != 'undefined') { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%= kksmsgError %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      
+      <% } %> 
+      <table id="formulario" class="table table-bordered table striped text-center mt-4">
+        <thead>
+          <tr class="bg-primary-500 text-white">
+            <th scope="col">Pregunta</th>
+            <th scope="col">Detalle</th>
+            
+            <th scope="col">KKs</th>
+            <th scope="col">Detalle</th>
+            <th scope="col">Operaciones</th>
+          </tr>
+
+        </thead>
+
+      </table>
+    </main>
+  </div>
+</div>
+<!-- errorForm Modal -->
+<div class="modal fade" id="errorForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title " id="exampleModalLabel">Error KKS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!------------------------ FORM ---------------------------->
+        <form class="row g-3 was-validated" name="confirmarerror" id="confirmarerror" action="/ot/registroerror" method="POST">
+
+              <input hidden id="idot" name="idot" readonly>
+              <input hidden id="idkks" name="idkks" readonly>
+          <div class="">
+              <label for="message-text" class="col-form-label" >Detalle del error:</label>
+              <textarea type="text" class="form-control" placeholder="Ingrese una descripcion corta del error" id="detalle" name="detalle" required></textarea>
+              <div class="invalid-feedback">Campo detalle obligatorio.</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+
+        </form>
+    </div>
+  </div>
+  </div>
+</div>
+<!-- -------REGISTRO DETALLE-------- -->
+<div class="modal fade" id="detalleForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title " id="exampleModalLabel">DETALLE KKS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- --------------FORM----------------- -->
+        <form class="row g-3 was-validated" name="kksdetalleform" id="kksdetalleform" action="/ot/registrodetalle" method="POST">
+            <input  id="idotdetalle" name="idotdetalle" readonly>
+            <input  id="idkksdetalle" name="idkksdetalle" readonly>
+            <input  id="estado" name="estado" value="1" readonly>
+            <label class="form-check-label " for="flexCheckDisabled">Estado Bateria :  </label>
+           
+            <div class="mb-3" >
+                <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="checkOk" id="checkOk" value=1 >
+                <label class="form-check-label" for="checkOk">Ok</label>
+              </div>
+             
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="checkError" id="checkError" value=0 disabled>
+                <label class="form-check-label" for="checkError">Error</label>
+              </div>
+            </div>
+          
+          <div class="mb-3 mt-0">
+            <label for="recipient-name" class="col-form-label">Voltaje:</label>
+            <input type="number" step="any" placeholder="Ingrese el voltaje" class="form-control" id="voltaje" name="voltaje" required>
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label" >Amperaje:</label>
+            <input type="number" step="any" placeholder="Ingrese el amperaje" class="form-control" id="amperaje" name="amperaje" required>
+          </div>
+          <div class="mb-3">
+            <label id="detallelabel" for="message-text" class="col-form-label">Detalle Adicional:</label>
+            <textarea id="detalletext" name="detalletext" type="text" placeholder="Detalle adicional, campo opcional." class="form-control" id="message-text"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            
+          </div>
+        </form>
+    </div>
+  </div>
+  </div>
+</div>
+<script>
+//DATATABLES JS
+$(document).ready(function () {
+    var kkslistaURL = '<%- kkslistaURL %>'; 
+    var idot = '<%- idot %>'; 
+    var tecnico = '<%- idtecnico %>'; 
+  $('#formulario').DataTable({
+    
+      "ordering": false,  
+      "pageLength": 50, 
+      "paging": true,
+      
+      language: {
+        url: '/json/es-ES.json'
+      },   
+      
+        dom: 'Bfrtilp',       
+      
+      ajax:{
+        // url:"/ot/kkslista",
+        url:kkslistaURL,
+        dataSrc:""
+      },
+      buttons:[ 
+			
+			
+		],
+      //Renderizado condicional de las comumnas
+      columns:[
+      {data:"general"},
+      {data:"especifica"},
+    
+      {data:"kks"},
+      
+      {"data": null,
+         "render": function (data, type, row) {
+          const kks = data.kks;
+            try {
+              if (data.formularioots[0].estado === 1) {
+                return '<i class="fa-solid  text-success fa-3x fa-check fa-fw"></i>';
+              }
+              if (data.formularioots[0].estado === 0) {
+                switch (kks) {
+                  // case ("BPA12"):
+                  // const voltaje = data.formularioots[0].voltaje;
+                  // const amperaje = data.formularioots[0].amperaje;
+                  // let bateria;
+                  // (data.formularioots[0].bateria)?bateria="ok":bateria="error"
+                  //  return "Bateria: "+bateria+"<br/> Voltaje: "+voltaje+"<br/> Amperaje: "+amperaje+"";
+                  //  break;
+                  default:
+                  return data.formularioots[0].detalle;
+                    break;
+                }
+                
+              }
+              return '<i class="fa-solid  text-danger fa-3x fa-check fa-fw"></i>';
+            } catch (error) {
+               console.log("errorrrr"+error);
+            }  
+            return("") 
+          },
+      },
+      //{ "data": null },
+      {"data": null,
+        "render": function (data,type,row) { 
+              const kks = data.kks;
+              const datos=data;
+              const ok = 1;
+              const error = 0;
+              const dataid = data.id;
+              let estado;
+              let detalle="";
+              let voltaje;
+              let amperaje;
+              const detallekks=data.formularioots[0].detalle;
+              const idformularioot=data.formularioots[0].id;
+              try {
+                
+                  if (data.formularioots[0].estado === 1) {
+                    return '<a onclick="confirmar(\''+idot+'\','+dataid+','+ok+','+data.formularioots[0].estado+');" class="btn  btn-sm btn-size my-2  bg-succes-dark text-white mx-3">Ok</a>';
+                  }
+                  if (data.formularioots[0].estado === 0) {
+                    return '<a href="/ot/asignarotc/'+idformularioot+'/'+idot+'/'+data.id+'/'+tecnico+'/'+detallekks+'"class="btn btn-sm  bg-danger text-white mx-3">Orden Correctiva</a>'                             
+                  }
+                  if (data.formularioots[0].estado === 2) {
+                    return '<a onclick="creada(\''+idot+'\','+dataid+','+ok+','+data.formularioots[0].estado+');" class="btn  btn-sm btn-size my-2  bg-info-dark text-white mx-3">OTC Creada</a>';
+                  }
+                  
+                } catch (error) {
+                  console.log("error al recuperar estado de la kks="+error);
+                }  
+                
+                
+            }
+      },
+       ],
+      columnDefs: [
+      {
+          targets:0,
+          className: 'dt-body-left',
+          width: "35%"
+      },
+      {
+          targets:1,
+          className: 'dt-body-left',
+          width: "25%"
+      },
+      {
+          targets:2,
+          className: 'dt-body-left',
+          width: "5%"
+      },
+      {
+          targets:2,
+          className: 'dt-body-left',
+          width: "30%"
+      },
+      {
+            // puts a button in the last column
+           
+            targets: [-1], 
+            className: 'dt-body-left',
+            width: "10%",
+        }
+      ],
+    });
+// alertas ok 
+
+  });
+
+function confirmar(idot,dataid,ok,estado){
+  if(estado=="1"){
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Solo se pueden asignar OTC a KKs con estado de Error',
+        showConfirmButton: false,
+        timer: 1800
+      })
+  }
+}
+function creada(idot,dataid,ok,estado){
+  if(estado=="2"){
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Esta kks ya tiene una OTC creada',
+        showConfirmButton: false,
+        timer: 1800
+      })
+  }
+}
+
+
+function confirmarError(idot,dataid,ok,estado,detalle){
+  console.log("Confirmar error function FUNCIOOON"+estado);
+  if(estado===undefined){
+    console.log("Confirmar error function estado UNDEFINED-->"+estado);
+    $("#idot").val(idot);
+          $("#idkks").val(dataid);
+          $("#detalle").val(detalle);
+          $('#errorForm').modal('show');
+
+  }
+  if(estado == 0 ){
+    console.log("Confirmar error function estado 0-->"+estado);
+    document.confirmarerror.action = "/ot/updateerror";
+    Swal.fire({
+        // title: estado,
+        text: "Desea EDITAR los detalles de ERROR?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $("#idot").val(idot);
+          $("#idkks").val(dataid);
+          $("#detalle").val(detalle);
+          $('#errorForm').modal('show');
+        
+        }
+      })
+  }
+  if(estado==1){
+    console.log("Confirmar error function estado 1");
+    // document.confirmarerror.action = "/ot/cambioaerror";
+    document.confirmarerror.action = "/ot/updateerror";
+    
+    Swal.fire({
+        // title: estado,
+        text: "Desea cambiar el estado de 'OK' a 'ERROR'?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Confirmar error function estado 0");
+          $("#idot").val(idot);
+          $("#idkks").val(dataid);
+          // $("#detalle").val(detalle);
+          $('#errorForm').modal('show');
+        
+        }
+      })
+  }
+
+}
+
+
+function detallebpa(idot,dataid,ok,estado,detalle,voltaje,amperaje){
+          $("#idotdetalle").val("");
+          $("#idkksdetalle").val("");
+          $("#checkError").val("");
+          $("#voltaje").val("");
+          $("#amperaje").val("");
+          $("#detalletext").val("");
+  if(estado===undefined){
+    console.log("detallebpa undefined:"+estado);
+  document.getElementById('checkOk').checked = true;
+  document.getElementById('checkError').checked = false;
+
+  document.getElementById("checkError").disabled = true;
+  document.getElementById("checkOk").disabled = false;
+  
+  document.getElementById('detalletext').hidden = false;
+   document.getElementById('detallelabel').hidden = false;
+  
+
+  
+    $("#idotdetalle").val(idot);
+    $("#idkksdetalle").val(dataid);
+    $('#detalleForm').modal('show');
+  }
+
+  if(estado == 1 ){
+    console.log("Confirmar error function estado UNO 1-->"+detalle);
+    document.kksdetalleform.action = "/ot/updateregistrodetalle";
+    document.getElementById('checkError').disabled = true;
+    document.getElementById("checkOk").disabled = false;
+    document.getElementById("checkOk").checked = true;
+    document.getElementById('detalletext').hidden = false;
+    document.getElementById('detallelabel').hidden = false;
+    Swal.fire({
+        // title: estado,
+        text: "Desea EDITAR los detalles?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $("#idotdetalle").val(idot);
+          $("#idkksdetalle").val(dataid);
+          $("#checkError").val(checkOk);
+          $("#voltaje").val(voltaje);
+          $("#amperaje").val(amperaje);
+          $("#detalletext").val(detalle);
+          $('#detalleForm').modal('show');
+        
+        }
+      })
+  }
+  
+  if(estado == 0){
+    document.kksdetalleform.action = "/ot/updateregistrodetalle";
+    document.getElementById('checkError').checked = false;
+    document.getElementById("checkOk").disabled = false;
+    document.getElementById("checkOk").checked = true;
+    document.getElementById('detalletext').hidden = false;
+   document.getElementById('detallelabel').hidden = false;
+    Swal.fire({
+        // title: estado,
+        text: "Desea cambiar el estado de 'ERROR' a 'OK'? Los detalles del error previamente almacenado se perderan.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if(result.isConfirmed){
+          console.log("Confirmar error function estado 0");
+          $("#idotdetalle").val(idot);
+          $("#idkksdetalle").val(dataid);
+          $('#detalleForm').modal('show');
+        }
+      })
+  }
+
+}
+
+function detallebpaerror(idot,dataid,ok,estado,detalle,voltaje,amperaje){
+  $("#idotdetalle").val("");
+          $("#idkksdetalle").val("");
+          $("#checkError").val("");
+          $("#voltaje").val("");
+          $("#amperaje").val("");
+          $("#detalletext").val("");
+  
+  if(estado===undefined){
+    
+  document.getElementById('checkError').checked = true;
+  document.getElementById("checkError").disabled = false;
+
+  document.getElementById('checkOk').checked = false;
+  document.getElementById("checkOk").disabled = true;
+  
+  
+   document.getElementById('detalletext').hidden = false;
+   document.getElementById('detallelabel').hidden = false;
+
+    $("#idotdetalle").val(idot);
+    $("#idkksdetalle").val(dataid);
+    $("#estado").val(0);
+    $('#detalleForm').modal('show');
+  }
+  if(estado == 0 ){
+    console.log("Confirmar error function estado 0-->"+estado);
+    console.log('📕: error message:'+detalle);
+    document.kksdetalleform.action = "/ot/updateregistrodetalle";
+    document.getElementById('checkError').checked = true;
+    document.getElementById("checkOk").disabled = true;
+    document.getElementById("checkError").disabled = false;
+    document.getElementById('detalletext').hidden = false;
+   document.getElementById('detallelabel').hidden = false;
+    Swal.fire({
+        // title: estado,
+        text: "Desea EDITAR los detalles de ERROR?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $("#idotdetalle").val(idot);
+          $("#idkksdetalle").val(dataid);
+          $("#checkError").val(checkOk);
+          $("#voltaje").val(voltaje);
+          $("#amperaje").val(amperaje);
+          $("#detalletext").val(detalle);
+          $('#detalleForm').modal('show');
+        
+        }
+      })
+  }
+  if(estado==1){
+    document.kksdetalleform.action = "/ot/updateregistrodetalle";
+    document.getElementById('checkError').checked = true;
+    document.getElementById("checkOk").disabled = true;
+    document.getElementById("checkError").disabled = false;
+    console.log("detalle registro cambio a error 1");
+    Swal.fire({
+        // title: estado,
+        text: "Desea cambiar el estado de 'OK' a 'ERROR'?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Confirmar error function estado 0");
+          $("#idotdetalle").val(idot);
+          $("#idkksdetalle").val(dataid);
+          $('#detalleForm').modal('show');
+        
+        }
+      })
+  }
+
+}
+ 
+
+function cerrarot(){
+  var idot = '<%- idot %>'; 
+
+    Swal.fire({
+        // title: estado,
+        text: "Desea FINALIZAR esta OT Diaria?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4CAF50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+         window.location = '/ot/cerrarotdiaria/'+idot+'/';
+       
+      })
+  
+
+}
+var myModal = new bootstrap.Modal(document.getElementById('detailForm'));
+myModal.open();
+
+var myModal = new bootstrap.Modal(document.getElementById('errorForm'));
+myModal.open();
+
+</script>
+<%- include('../common/footer')%>
+
+

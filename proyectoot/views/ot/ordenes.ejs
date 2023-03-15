@@ -1,0 +1,319 @@
+
+<%- include('../common/header')%>
+%>
+
+
+<div class="container-fluid">
+  <div class="row">
+    
+    <%- include('../common/asidesupervisor')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1><%=title%></h1>
+
+        
+        
+      
+      </div>
+      <% switch (msgok) {
+        case 0 : %>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            OTD en proceso
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% break;
+        case 1 : %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>
+            OTD Cancelada Con Exito
+          </strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        <% break;
+        default : %>
+        <% break;
+        } %>
+      
+      <table id="especialidad" class="table table-bordered table striped text-center mt-4">
+        <thead>
+          <tr class="bg-primary-500 text-white">
+            <th scope="col">Supervisor</th>
+            <th scope="col">Tecnico</th>
+            <th scope="col">Turbina</th>
+            <th scope="col">Creado</th>
+            <th scope="col">Duración(hrs)</th>
+            <th scope="col">Tecnico</th>
+            <!-- <th scope="col">Supervisor</th> -->
+            
+            <th scope="col">Operaciones</th>
+          </tr>
+
+        </thead>
+
+      </table>
+      
+    </main>
+  </div>
+  
+</div>
+
+<script>
+  
+
+  $(document).ready(function () {
+    $('#especialidad').DataTable({
+      // "ordering": false,   
+      order: [[3, 'desc']],  
+      // "order": [[ 0, 'desc' ], [ 5, 'Espera...' ]],
+      language: {
+        url: '/json/es-ES.json'
+      },      
+      ajax:{
+        url:"/ot/ordenesjson",
+        dataSrc:""
+      },
+      columns:[
+        {data:"Supervisor.nombre"},
+        {data:"Tecnico.nombre"},
+        {data:"Turbina.nombre"},
+        {data:null,
+          "render": function (data, type, row) {
+            
+
+            const fechaCreado = data.createdAt.slice(0, 19).replace('T',' ');
+            // return new Date(JSON.stringify(fechaCreado))
+               return fechaCreado;
+            },
+        },
+        {data:null,
+          "render": function (data, type, row) {
+                let datenow = new Date(Date.now()).toISOString().slice(0, 19);
+                var date1 = new Date(datenow);
+                switch (data.estadotecnico) {
+                case 0:
+                    // IGUALANDO EL FORMATO DE LAS FECHAS A RESTAR, CREATEDAT y DATENOW
+                    const creado = data.createdAt.slice(0, 19);
+                    // Las volvemos objetos del tipo DATE
+                    const date2 = new Date(creado);
+                    // Esto tb funciona, es solo otra formula
+                    // var diff = (date1.getTime() - date2.getTime())/1000;
+                    // diff = diff / (60 * 60);
+                    
+                    const diff = date1.getTime() - date2.getTime();
+                    const horas = diff / (1000 * 3600);
+                    // redondeamos
+                    const horasRedondeado = Math.abs(Math.round(horas*100)/100);
+                    // armando horas y min
+                    const horaEsp = Math.trunc(horasRedondeado);
+                    const decimalEsp = Math.abs(Math.round((horasRedondeado - horaEsp)*60));
+
+                    // return  horasRedondeado;
+                    return  horaEsp+":"+decimalEsp;
+                case 1:
+                    const inicio = data.inicia.slice(0, 19);
+                    const inicioDate = new Date(inicio);
+
+                    const diffProcesando = inicioDate.getTime() - date1.getTime();
+                    const horasProcesando = diffProcesando / (1000 * 3600);
+                    // redondeamos
+                    const horasProcRedondeado = Math.abs(Math.round(horasProcesando*100)/100);
+
+                    const horaProc = Math.trunc(horasProcRedondeado);
+                    const decimalProc = Math.abs(Math.round((horasProcRedondeado - horaProc)*60));
+                    
+                    //  return  horasProcRedondeado;
+                     return  horaProc+":"+decimalProc;
+                case 2:
+
+                    const inicioFin = data.inicia.slice(0, 19);
+                    const inicioDateFin = new Date(inicioFin);
+                    const finalizaFin = data.finaliza.slice(0, 19);
+                    const finalizaDateFin = new Date(finalizaFin);
+
+                    const finHoras = finalizaDateFin.getTime() - inicioDateFin.getTime();
+                    const horasFinalizado = finHoras / (1000 * 3600);
+                    const finalizoRedondeado = Math.abs(Math.round(horasFinalizado*100)/100);
+                    const hora = Math.trunc(finalizoRedondeado);
+                    const decimal = Math.abs(Math.round((finalizoRedondeado - hora)*60));
+                    // Math.abs(Math.round((finalizoRedondeado - hora)*60);
+                   
+                    // const date = new Date(finalizoRedondeado);
+                    // const hoursAndMinutes = date.getHours() + ':' + date.getMinutes();
+                    // const finalizoRedondeado = new Date(horasFinalizado).getMinutes()
+                    
+                    //  return  horasFinalizado.toFixed(2);
+                      return  hora+":"+decimal;
+                    // return finalizoRedondeado;
+                default:
+                    return "Error de estado";
+                }
+            },
+        },
+        // {data:"Turbina.numeroid"},
+        {"data": null,
+         "render": function (data, type, row) {
+                switch (data.estadotecnico) {
+                case 0:
+                    return  '<h6 class="text-primary">Espera...</h6>';
+                case 1:
+                    return  '<h6 class="text-warning">Procesando...</h6>';
+                case 2:
+                    return  '<h6 class="text-success">Finalizado</h6>';
+                default:
+                    return "Error de estado";
+                }
+            },
+        },
+        // {"data": null,
+        //  "render": function (data, type, row) {
+        //         switch (data.estasupervisor) {
+        //         case 0:
+        //             return  '<h6 class="text-primary">Activo</h6>';
+        //         case 1:
+        //             return  '<h6 class="text-success">Concluido</h6>';
+        //         default:
+        //             return "Error de estado";
+        //         }
+        //     },
+        // },
+        {"data": null,
+            "render": function (data,type,row) { 
+              const idotd = row.id;
+              let estSupervisor=data.estasupervisor;
+              // const tecnico = row.tecnico.nombre;
+          //   switch (data.estadotecnico) {
+          //   case (2):
+          //   return '<a href="/ot/informeotd/'+data.id+'/'+data.idtecnico+'"    class="btn btn-sm  bg-succes-dark text-white mx-3">Informe</a>'
+          //   break;
+          
+          //   default:
+          //   return '<button type="button" onclick="confirmar(\'' + row.Tecnico.nombre +'\',\'' + row.Turbina.nombre +'\','+idotd+');" class="btn btn-sm bg-primary-dark text-white">Cerrar OT</button>'                           
+            
+          //   break;
+          // }
+          if(estSupervisor==4){
+            
+            return '<i class="fa-solid  text-danger fa-3x fa-check fa-fw"></i>';
+          }
+          if(estSupervisor==1 ){
+            
+            return '<i class="fa-solid  text-success fa-3x fa-check fa-x"></i>';
+            
+          }
+          if(estSupervisor==2){
+            
+            return '<i class="fa-solid  text-danger fa-3x fa-check fa-x"></i>';
+          }
+          if(estSupervisor==3 ){
+            
+            return '<i class="fa-solid  text-success fa-3x fa-check fa-fw"></i>';
+            
+          }
+          // return '<i class="fa-solid  text-success fa-3x fa-check fa-x"></i>';
+          if(data.estadotecnico == 1 ){
+            return  '<h6 class="text-warning">Procesando...</h6>';
+          }
+          if(data.estadotecnico == 2 && estSupervisor==0){
+            return '<a href="/ot/informeotd/'+data.id+'/'+data.idtecnico+'"    class="btn btn-sm  bg-info-dark text-white mx-3">Informe</a><button type="button" onclick="procesarpos(\'' + row.Tecnico.nombre +'\','+row.id+');"class="btn btn-sm  bg-succes-dark text-white mx-3">Cerrar Inf. OTD+</button><button type="button" onclick="procesarneg(\'' + row.Tecnico.nombre +'\','+row.id+');"class="btn btn-sm  bg-danger-dark text-white mx-3 my-2">Cerrar Inf. OTD-</button>'
+          }
+          if(data.estadotecnico == 0 && estSupervisor==0){
+            return '<button type="button" onclick="cerrarpos(\'' + row.Tecnico.nombre +'\','+idotd+');" class="btn btn-sm bg-succes-dark my-2 mx-2 text-white">Cancelar +</button><button type="button" onclick="cerrarneg(\'' + row.Tecnico.nombre +'\','+idotd+');" class="btn btn-sm bg-danger-dark text-white">Cancelar -</button>'                           
+            
+                
+          }
+
+
+
+
+
+                
+                }
+        },
+      ]      
+    });
+});
+function confirmar(tecnico,turbina,idotd){
+  Swal.fire({
+  title: tecnico,
+  text: "Cancelar OTD: "+idotd +" "+ "Turbina: "+turbina,
+  icon: 'warning',
+  confirmButtonColor: '#4CAF50',
+  // cancelButtonColor: '#d33',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Cerrar',
+  denyButtonText: `Cerrar -`,
+}).then((result) => {
+  if (result.isConfirmed) {
+    // Swal.fire('Saved!', '', 'success')
+    window.location = '/ot/cancelarotd/'+idotd;
+  } else if (result.isDenied) {
+    // Swal.fire('Changes are not saved', '', 'info')
+    window.location = '/ot/cancelarotdinforme/'+idotd;
+  }
+})
+}
+function cerrarpos(tecnico,idotd){
+  Swal.fire({
+  title: tecnico,
+  text: "Cancelar informe sin falta?",
+  icon: 'success',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/ot/cancelarotd/'+idotd;
+    
+  }
+})
+}
+function cerrarneg(tecnico,idotd){
+  Swal.fire({
+  title: tecnico,
+  text: "Canelar OTD con llamada de atencion?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/ot/cancelarotdinforme/'+idotd;
+    
+  }
+})
+}
+function procesarpos(tecnico,idotd){
+  Swal.fire({
+  title: tecnico,
+  text: "Procesar informe OTD positivo?",
+  icon: 'success',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/ot/infposotd/'+idotd;
+    
+  }
+})
+}
+function procesarneg(tecnico,idotd){
+  Swal.fire({
+  title: tecnico,
+  text: "Procesar informe OTD negativo?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/ot/infnegotd/'+idotd;
+    
+  }
+})
+}  
+</script>
+<%- include('../common/footer')%>
+

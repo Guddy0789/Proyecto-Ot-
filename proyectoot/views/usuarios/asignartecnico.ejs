@@ -1,0 +1,134 @@
+
+<%- include('../common/header')%>
+%>
+
+
+<div class="container-fluid">
+  <div class="row">
+    
+    <%- include('../common/asidesupervisor')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1><%=title%></h1>
+
+        
+        
+      
+      </div>
+      
+      <% if(typeof msgok != 'undefined') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= msgok %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      
+      <% } %> 
+     
+      <table id="especialidad" class="table  table-bordered table striped text-center mt-4">
+        <thead>
+          <tr class="bg-primary-500 text-white">
+            <th scope="col">Nombre</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Especialidad</th>
+            <th scope="col">Celular</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+            <!-- <th scope="col">Asignar OT</th> -->
+          </tr>
+
+        </thead>
+
+      </table>
+     
+    </main>
+  </div>
+  <!-- <h1 class="h2"><%=title%></h1> -->
+</div>
+
+<script>
+  
+
+  $(document).ready(function () {
+    $('#especialidad').DataTable({
+    
+      "ordering": true,   
+      language: {
+        url: '/json/es-ES.json'
+      },      
+      ajax:{
+        url:"/usuarios/tecnicos",
+        dataSrc:""
+      },
+      
+      columns:[
+      {data:"nombre"},
+      {data:"correo"},
+      {data:"especialidade.especialidad"},
+      {data:"celempresa"},
+      {"data": null,
+         "render": function (data, type, row) {
+                return data.estado
+                    ? '<h6 class="text-success">Habilitado</h6>'
+                    : '<h6 class="text-danger">Deshabilitado</h6>'
+            },
+        },
+        
+        {"data": null,
+            "render": function (data,type,row) { 
+              
+              var idUsuario = row.id;
+              // var esp = JSON.stringify(data);
+              // var esp = "Guddy";
+              // alert(JSON.stringify(idUsuario));
+              return '<a onclick="confirmarSupervisor(\'' + row.nombre +'\','+idUsuario+');" class="btn btn-sm  bg-succes-dark text-white ms-3">Asignar OT</a>'                           
+              // return '<a href="/panel/especialidades/editar/'+data.id+'" class="btn btn-sm  bg-blue text-white mx-3">Editar</a>'                           
+                
+                }
+        },
+        
+       
+      ]      
+    });
+});
+
+function confirmarSupervisor(especialidad,id){
+  Swal.fire({
+  title: especialidad,
+  text: "Desea asignar una OT a este tecnico?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+  
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/ot/nuevo/'+id;
+  }
+})
+}
+function confirmarAdministrador(especialidad,id){
+  Swal.fire({
+  title: especialidad,
+  text: "Desea hacer a este usuario ADMINISTRADOR?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+  
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/usuarios/administrador/nuevo/'+id;
+    
+    // Swal.fire(
+      
+    //   'Estado actualizado con exito.',
+    //   'success'
+    // )
+  }
+})
+}
+  </script>
+<%- include('../common/footer')%>
+

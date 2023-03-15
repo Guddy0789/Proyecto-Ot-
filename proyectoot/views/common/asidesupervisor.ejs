@@ -1,0 +1,58 @@
+
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+
+    <div class="position-sticky pt-3">
+      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        
+        <span>Supervisor Menu</span>
+        <a class="link-secondary" href="#" aria-label="Add a new report">
+          <span data-feather="plus-circle"></span>
+        </a>
+      </h6>
+      <ul class="nav flex-column">
+      
+        <!-- <li class="nav-item">
+            <a class="nav-link <%= page_name === 'panel' && 'active' %>" href="/principal">Principal</a>
+        </li> -->
+        
+        <li class="nav-item">
+            <a class="nav-link <%= page_name === 'tecnicos' && 'active' %>" href="/usuarios/asignar">Tecnicos</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link <%= page_name === 'ot' && 'active' %>" href="/ot/ordenes">OT Diaria</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link <%= page_name === 'otc' && 'active' %>" href="/ot/ordenesc">OT Correctiva</a>
+        </li>
+
+      </ul>
+
+      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span>Reportes</span>
+        <a class="link-secondary" href="#" aria-label="Add a new report">
+          <span data-feather="plus-circle"></span>
+        </a>
+      </h6>
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item">
+          <a class="nav-link <%= page_name === 'reporteturbina' && 'active' %>" href="/reportes/turbina-kks">Turbina - KKs</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link <%= page_name === 'tecnicos-otd' && 'active' %>" href="/reportes/tecnicos-otd">Tecnicos - OTDs</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">
+            <span data-feather="file-text"></span>
+            Tecnicos-OTC
+          </a>
+        </li> -->
+        
+      </ul>
+    </div>
+  </nav>
+  
+  
+  

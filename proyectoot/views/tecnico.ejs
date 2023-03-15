@@ -1,0 +1,14 @@
+<%- include('./common/header')%>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('./common/asidetecnico')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="  pt-3 pb-2 mb-3 border-bottom">
+        <h4 class="text-primary">Bienvenido :<span class="text-dark"> <% if(typeof user != 'undefined') { %><%=  user.nombre %><% } %></span>  </h4>
+      </div>
+      Panel de ordenes de trabajo
+    </main>
+  </div>
+</div>
+<%- include('./common/footer')%>
+

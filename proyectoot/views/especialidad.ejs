@@ -1,0 +1,101 @@
+
+<%- include('./common/header')%>
+%>
+
+
+<div class="container-fluid">
+  <div class="row">
+    
+    <%- include('./common/aside')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1><%=title%></h1>
+
+        
+        <a href="/panel/especialidades/nuevo" class="btn btn-md bg-primary-500 text-white"> + Agregar Especialidad</a>
+      
+      </div>
+      
+      <% if(typeof msgok != 'undefined') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= msgok %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %> 
+      
+      <table id="especialidad" class="table table-bordered table striped text-center mt-4">
+        <thead>
+          <tr class="bg-primary-500 text-white">
+            <th scope="col">Especialidad</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+
+        </thead>
+
+      </table>
+      
+    </main>
+  </div>
+  <h1 class="h2"><%=title%></h1>
+</div>
+
+<script>
+  
+
+  $(document).ready(function () {
+    $('#especialidad').DataTable({
+      "ordering": false,   
+      language: {
+        url: '/json/es-ES.json'
+      },      
+      ajax:{
+        url:"/panel/especialidades",
+        dataSrc:""
+      },
+      columns:[
+        {data:"especialidad"},
+        {"data": null,
+         "render": function (data, type, row) {
+                return data.estado
+                    ? '<h6 class="text-success">Habilitado</h6>'
+                    : '<h6 class="text-danger">Deshabilitado</h6>'
+            },
+        },
+        {"data": null,
+            "render": function (data,type,row) { 
+              console.log("--------dafaking row"+data);
+              var partNo = row.id;
+              // var esp = JSON.stringify(data);
+              // var esp = "Guddy";
+              //  alert(JSON.stringify(type));
+                return '<button type="button" onclick="confirmar(\'' + row.especialidad +'\','+partNo+');" class="btn btn-sm bg-violet text-white">Cambiar estado</button><a href="/panel/especialidades/editar/'+data.id+ '"class="btn btn-sm  bg-blue text-white mx-3">Editar</a>'                           
+                
+                }
+        },
+      ]      
+    });
+});
+function confirmar(especialidad,id){
+  Swal.fire({
+  title: especialidad,
+  text: "Desea cambiar el estado de esta especialidad?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/panel/especialidades/estado/'+id;
+    // Swal.fire(
+      
+    //   'Estado actualizado con exito.',
+    //   'success'
+    // )
+  }
+})
+}
+  </script>
+<%- include('./common/footer')%>
+

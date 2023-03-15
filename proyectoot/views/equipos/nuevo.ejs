@@ -1,0 +1,151 @@
+
+<%- include('../common/header')%>
+
+<div class="container">
+  <div class="row">
+    <%- include('../common/aside')%>    
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Registro Turbinas</h2>
+        
+        <a href="/equipos" class="btn btn-md bg-primary-500 text-white">Volver a la lista</a>
+      
+      </div>
+<!-- Formulario de registro especialidad -->
+
+<div class="row justify-content-center">
+    <div class="col-md-12 align-self-center">
+      <% if(typeof msgError != 'undefined') { %>
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+              <strong><%= msgError %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+      <% } %> 
+      
+        <form class="row g-3" action="/equipos/nuevo" method="POST">
+                              
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Nombre Turbina</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" value="<% if(typeof valores != 'undefined') { %><%= valores.nombre %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "nombre") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+         
+        
+          
+            
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Marca</label>
+          <input type="text" class="form-control" id="marca" name="marca" value="<% if(typeof valores != 'undefined') { %><%= valores.marca %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "marca") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+
+          
+
+          
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Modelo</label>
+          <input type="text" class="form-control" id="modelo" name="modelo" value="<% if(typeof valores != 'undefined') { %><%= valores.modelo %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "modelo") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%>   
+          </div>
+
+          
+
+          
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Numero de Identificacion</label>
+          <input type="text" class="form-control" id="numeroid" name="numeroid" value="<% if(typeof valores != 'undefined') { %><%= valores.numeroid %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "numeroid") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+
+          
+
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Velocidad Nominal (RPM)</label>
+          <input type="text" class="form-control" id="velocidad" name="velocidad" value="<% if(typeof valores != 'undefined') { %><%= valores.velocidad %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "velocidad") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+
+          
+
+          <div class="col-md">
+          <label for="inputState" class="form-label">Tipo de Combustible</label>
+          <select class="form-select" id="combustible" name="combustible">
+            <option value=false selected>Tipo de combustible</option>
+            <option value="gas">Gas</option>
+
+          </select>
+          <% if(typeof validaciones != 'undefined') { %>
+          <% const msg = validaciones.find(val => val.param == "combustible") %>
+          <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Potencia ISO (MW)</label>
+          <input type="text" class="form-control" id="potenciaiso" name="potenciaiso" value="<% if(typeof valores != 'undefined') { %><%= valores.potenciaiso %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "potenciaiso") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+
+         
+
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Potencia Instalada (MVA)</label>
+          <input type="text" class="form-control" id="potenciainstalada" name="potenciainstalada" value="<% if(typeof valores != 'undefined') { %><%= valores.potenciainstalada %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "potenciainstalada") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%>   
+          </div>
+
+          
+
+          <div class="col-md-6">
+          <label for="inputAddress" class="form-label">Potencia Efectiva (MW)</label>
+          <input type="text" class="form-control" id="potenciaefectiva" name="potenciaefectiva" value="<% if(typeof valores != 'undefined') { %><%= valores.potenciaefectiva %><%}%>">
+          <% if(typeof validaciones != 'undefined') { %>
+            <% const msg = validaciones.find(val => val.param == "potenciaefectiva") %>
+            <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+          <%}%> 
+          </div>
+
+
+
+          <br>
+          <button type="submit" class="btn bg-primary-500 text-white w-100">Registrar Turbina</button>
+          </div>
+        </form><br>
+          
+    </div>
+</div>
+   
+
+    </main>
+  </div>
+  
+</div>
+
+<script>
+  
+   
+</script>
+<%- include('../common/footer')%>
+

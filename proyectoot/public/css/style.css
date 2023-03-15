@@ -1,0 +1,106 @@
+/* body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+} */
+.btn-purple{ 
+ color: #fff;
+ background-color: #9933CC;
+}
+.bg-primary-500{
+  
+  background-color: #004582;
+  
+}
+.bg-violet{
+  
+  background-color: #5d3e9f;
+}
+
+.bg-blue{
+  
+  background-color: #28329f;
+}
+.bg-succes-dark{
+  
+  background-color: #007E33;
+}
+.bg-info-dark{
+  
+  background-color: #066281;
+}
+.bg-danger-dark{
+  
+  background-color: #c62a3c;
+}
+.bg-warning-dark{
+  
+  background-color: #f57f17;
+}
+.bg-primary-dark{
+  
+  background-color: #0d47a1;
+}
+
+.bg-default-dark{
+  
+  background-color: #00695c;
+}
+
+/* Color de texto */
+
+ .text-primary-500{
+   
+   color: #004582;
+   
+ }
+ .text-violet{
+   
+   color: #5d3e9f;
+ }
+ 
+ .text-blue{
+   
+   color: #28329f;
+ }
+ .text-succes-dark{
+   
+   color: #007E33;
+ }
+ .text-info-dark{
+   
+   color: #066281;
+ }
+ .text-warning-dark{
+   
+   color: #f57f17;
+ }
+ .text-primary-dark{
+   
+   color: #0d47a1;
+ }
+ 
+ .text-default-dark{
+   
+   color: #00695c;
+ }
+ /* TAMAÑO DEL BOTON */
+ .btn-size{
+   width: 80px;
+ }
+ table.dataTable tbody td {
+  vertical-align: middle;
+}
+ 
+/* Custom buttom */
+.custom-button {
+  width: 120px;
+  text-align: center;
+}
+
+
+
+

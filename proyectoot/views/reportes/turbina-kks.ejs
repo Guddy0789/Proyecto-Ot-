@@ -1,0 +1,128 @@
+
+<%- include('../common/header')%>
+%>
+
+
+<div class="container-fluid">
+  <div class="row">
+    
+    <%- include('../common/asidesupervisor')%>    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1><%=title%></h1>
+        
+
+        
+<!-- Button trigger modal -->
+
+
+<!-- ------------------------------------ -->
+        
+      
+      </div>
+      
+      <% if(typeof msgok != 'undefined') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= msgok %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      REPORTE TURBINA KKS
+      <% } %> 
+      <% if(typeof kksmsgok != 'undefined') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= kksmsgok %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      
+      <% } %> 
+      <table id="especialidad" class="table table-bordered table striped text-center mt-4">
+        <thead>
+          <tr class="bg-primary-500 text-white">
+            <th scope="col">Turbina</th>
+            <th scope="col">#OT Diarias</th>
+            <th scope="col">Estado Turbina</th>
+            <th scope="col">Operaciones</th>
+          </tr>
+
+        </thead>
+
+      </table>
+      
+    </main>
+  </div>
+  
+</div>
+
+<script>
+  
+
+$(document).ready(function () {
+    $('#especialidad').DataTable({
+      // "ordering": true, 
+      order: [[2, 'desc']],  
+      language: {
+        url: '/json/es-ES.json'
+      },      
+      ajax:{
+        url:"/reportes/turbina-total-errores",
+        dataSrc:""
+      },
+      columns:[
+      {data:"nombre"},
+      {"data": null,
+         "render": function (data, type, row) {
+            return JSON.stringify(data.Turbina.total);
+         }
+      },
+      {"data": null,
+         "render": function (data, type, row) {
+          return data.estado
+                    ? '<h6 class="text-success">Habilitado</h6>'
+                    : '<h6 class="text-danger">Deshabilitado</h6>'
+         }
+      },
+      {"data": null,
+            "render": function (data,type,row) { 
+              console.log("--------dafaking row"+data);
+              var partNo = row.id;
+              // var esp = JSON.stringify(data);
+              // var esp = "Guddy";
+              //  alert(JSON.stringify(type));
+                return '<a href="/reportes/detalle-turbina-kks/'+data.id+ '"class="btn btn-sm  bg-blue text-white mx-3">Detalle KKs</a>'                           
+                
+                }
+        },
+    
+      ]      
+    });
+});
+
+function confirmar(especialidad,id){
+  Swal.fire({
+  title: especialidad,
+  text: "Desea cambiar el estado de esta especialidad?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#4CAF50',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location = '/panel/especialidades/estado/'+id;
+    // Swal.fire(
+      
+    //   'Estado actualizado con exito.',
+    //   'success'
+    // )
+  }
+})
+}
+
+
+var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+myModal.show();
+
+
+</script>
+<%- include('../common/footer')%>
+

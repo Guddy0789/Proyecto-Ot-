@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Registro</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    
+
+    
+    <!-- Custom styles for this template -->
+    <link href="css/form-register.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+<body class="form-register">
+  
+   <div class="container">
+    <div class="d-flex justify-content-between">
+      <h2>Formulario de Registro</h2><a href="/" class="btn btn-md bg-primary-500 text-white">Regresar</a>
+    </div>
+    
+    <hr class="btn-purple" style="width: 100%;">
+     <div class="row">
+      <main class="">
+        <% if(typeof msgok != 'undefined') { %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong><%= msgok %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        
+        <% } %> 
+        <% if(typeof msgError != 'undefined') { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong><%= msgError %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        
+        <% } %> 
+        <form class="row g-3" action="/registro" method="POST">
+          <h5>Datos de usuario</h5>
+          <hr class="py-0 my-0 bg-primary">          
+          <div class="col-md-4">
+            <label for="correo" class="form-label">Correo</label>
+            <input  class="form-control" id="correo" name="correo" value = <% if(typeof valores != 'undefined'){%><%= valores.correo %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "correo") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+         
+          
+          
+          
+          <div class="col-md-4">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password"  value=<% if(typeof valores != 'undefined'){%><%= valores.password %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "password") %>
+              <div style= "color:red">      
+                <% if(typeof msg != 'undefined') { %>
+                      <%= msg.msg %>   
+                  <% } %> 
+              </div>
+            <% } %> 
+          </div>
+          <div class="col-md-4">
+            <label for="password" class="form-label">Repita la Contraseña</label>
+            <input type="password" class="form-control" id="password2" name="password2"  value=<% if(typeof valores != 'undefined'){%><%= valores.password2 %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "password") %>
+              <div style= "color:red">      
+                <% if(typeof msg != 'undefined') { %>
+                      <%= msg.msg %>   
+                  <% } %> 
+              </div>
+            <% } %> 
+          </div>
+          <h5>Datos personales</h5>
+          <hr class="py-0 my-0 bg-primary">                        
+          <div class="col-md-6">
+            <label for="inputAddress" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value = <% if(typeof valores != 'undefined'){%><%- JSON.stringify(valores.nombre) %><%}%>  >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "nombre") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          <div class="col-md">
+            <label for="inputAddress" class="form-label">Carnet</label>
+            <input type="text" class="form-control" id="ci" name="ci"  value=<% if(typeof valores != 'undefined'){%><%= valores.ci %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "ci") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          <div class="col-md">
+            <label for="inputState" class="form-label">Tipo de Sangre</label>
+            <select class="form-select" id="sangre" name="sangre">
+            
+              <option value=false selected>Seleccione su tipo de sangre</option>
+              
+              <option value="1">A+</option>
+              <option value="2">A-</option>
+              <option value="3">B+</option>
+              <option value="4">B-</option>
+              <option value="5">AB+</option>
+              <option value="5">AB-</option>
+              <option value="6">O+</option>
+              <option value="7">O-</option>
+            </select>
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "sangre") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+
+
+
+       
+          <div class="col-md-9">
+            <label for="inputAddress" class="form-label">Direccion Particular</label>
+            <input type="text" class="form-control" id="direccion" name="direccion"  value=<% if(typeof valores != 'undefined'){%><%- JSON.stringify(valores.direccion) %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "direccion") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          <div class="col-md">
+            <label for="inputAddress2" class="form-label">Celular Personal</label>
+            <input type="text" class="form-control" id="celular" name="celular"  value=<% if(typeof valores != 'undefined'){%><%= valores.celular %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "celular") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          <h5>Datos Empresariales</h5>
+          <hr class="py-0 my-0 bg-primary">              
+          <div class="col-md-8">
+            <label for="inputState" class="form-label">Especialidad</label>
+            <select id="especialidad" name="especialidad" class="form-select" >
+            <option value=false selected>Seleccione una especialidad</option>
+            <% for(var i=0; i < esp.length; i++) { %>
+               <option value=<%= esp[i].id %>><%= esp[i].especialidad %></option>
+               
+            <% } %>
+            </select>
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "especialidad") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+
+          <div class="col-4">
+            <label for="inputAddress2" class="form-label">Celular Empresarial</label>
+            <input type="text" class="form-control" id="celempresa" name="celempresa"  value=<% if(typeof valores != 'undefined'){%><%= valores.celempresa %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "celempresa") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          
+          <div class="col-12">
+            <br>
+            <button type="submit" class="btn btn-primary w-100">Registrame</button>
+            <br><br>
+            <a href="/" class="btn btn-secondary w-100">Cancelar</a>
+            
+          </div>
+        </form>
+      </main>
+      
+     </div>
+    
+   </div> 
+
+
+
+    
+  </body>
+</html>

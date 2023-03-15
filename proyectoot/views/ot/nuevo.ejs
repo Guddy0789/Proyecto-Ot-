@@ -1,0 +1,99 @@
+
+<%- include('../common/header')%>
+
+<div class="container">
+  <div class="row">
+    <%- include('../common/asidesupervisor')%>    
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Formulario OT</h2>
+        
+        <a href="/panel/especialidad" class="btn btn-md bg-primary-500 text-white">Volver a la lista</a>
+      
+      </div>
+<!-- Formulario de registro especialidad -->
+
+<div class="row justify-content-center">
+    <div class="col-md-12 align-self-center">
+      <% if(typeof msgError != 'undefined') { %>
+        
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+              <strong><%= msgError %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          
+        <% } %> 
+      
+        <form class="row g-3" action="/ot/nuevo" method="POST">
+          <h5>Datos de Supervisor</h5>
+          <hr class="py-0 my-0 bg-primary">
+          <input hidden id="idsupervisor" readonly name="idsupervisor" value="<%= supervisor.id %>">
+          
+          <div class="col-md">
+            <label for="correo" class="form-label">Nombre del supervisor</label>
+            <input  class="form-control" readonly id="nombre" name="nombre" value = <% if(typeof supervisor != 'undefined'){%><%- JSON.stringify(supervisor.nombre) %><%}%> >
+            
+          </div>
+         
+          <h5>Datos de Tecnico</h5>
+          <hr class="py-0 my-0 bg-primary">                        
+          <div class="col-md-6">
+            <input hidden id="idtecnico" readonly name="idtecnico" value="<%= tecnico.id %>">
+            <label for="inputAddress" class="form-label">Nombre del tecnico</label>
+            <input type="text" readonly class="form-control" id="nombre" name="nombre" value = <% if(typeof tecnico != 'undefined'){%><%- JSON.stringify(tecnico.nombre) %><%}%>  >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "nombre") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          <div class="col-md">
+            <label for="inputAddress" class="form-label">Celular del tecnico</label>
+            <input type="text" readonly class="form-control" id="ci" name="ci"  value=<% if(typeof tecnico != 'undefined'){%><%= tecnico.celempresa %><%}%> >
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "ci") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+         
+          
+         
+          <h5>Datos de Equipo</h5>
+          <hr class="py-0 my-0 bg-primary">              
+          
+          <div class="col-md">
+            <label for="inputState" class="form-label">Turbina</label>
+            <select id="turbina" name="turbina" class="form-select" >
+            <option value=false selected>Seleccione una turbina</option>
+            <% for(var i=0; i < equipos.length; i++) { %>
+               <option value=<%= equipos[i].id %>><%= equipos[i].nombre  %></option>
+               
+            <% } %>
+            </select>
+            <% if(typeof validaciones != 'undefined') { %>
+              <% const msg = validaciones.find(val => val.param == "turbina") %>
+              <div style= "color:red"><% if(typeof msg != 'undefined') { %><%= msg.msg %><% }%></div>
+            <%}%> 
+          </div>
+          
+          <div class="col-12">
+            <br>
+            <button type="submit" class="btn btn-primary w-100">Crear Orden de Trabajo</button>
+          </div>
+        </form>
+        
+    </div>
+</div>
+   
+
+    </main>
+  </div>
+  
+</div>
+
+<script>
+  
+   
+</script>
+<%- include('../common/footer')%>
+
