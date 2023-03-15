@@ -3,10 +3,10 @@
   //require('dotenv').config(); 
   
   
-  const sequelize = new Sequelize(development.database,development.username,development.password,{
-      host:development.host,
+  const sequelize = new Sequelize(production.database,production.username,production.password,{
+      host:production.host,
       dialect:'mysql',
-      port: development.port,
+      port: production.port,
   })
 
 
