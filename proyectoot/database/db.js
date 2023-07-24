@@ -7,7 +7,7 @@
       host:development.host,
       dialect:'mysql',
       port: development.port,
-      // DATABASE_URL: process.env.DATABASE_URL,
+      DATABASE_URL: process.env.DATABASE_URL,
   })
 
 
