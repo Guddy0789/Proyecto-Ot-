@@ -5,7 +5,7 @@
   
   const sequelize = new Sequelize(development.database,development.username,development.password,{
       host:development.host,
-      dialect:'mysql',
+      dialect:'postgres',
       port: development.port,
       DATABASE_URL: process.env.DATABASE_URL,
   })
