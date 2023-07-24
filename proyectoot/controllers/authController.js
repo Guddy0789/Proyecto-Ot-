@@ -58,8 +58,8 @@ exports.registro = async (req, res, next) =>{
 }
 //============LOGIN USUARIOS REGISTRADOS=======================
 exports.login = async (req, res) =>{
-    console.log("aqui estoy===========LOGIN");
-    console.log(req.body);
+    // console.log("aqui estoy===========LOGIN");
+    // console.log(req.body);
       //respuesta si todo esta OK(no entra al if)  
       const {correo, password} = req.body;
 
@@ -158,7 +158,7 @@ exports.isAuthenticated  = async (req, res, next) =>{
     }
 
 }
-//============LogOuuutt=======================
+//============LogOut=======================
 exports.logout = (req, res)=>{
     res.clearCookie('jwt')   
     

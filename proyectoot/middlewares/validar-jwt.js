@@ -13,7 +13,6 @@ const validarJWT = (req,res=response,next) =>{
             msg:'no hay token en la peticion'
         })
   }
-
   try {
       const {uid,email} =  jwt.verify(
           token,
@@ -24,10 +23,6 @@ const validarJWT = (req,res=response,next) =>{
       req.email=email;
       console.log(uid+email);
 
-
-
-
-      
   } catch (error) {
       return res.status(401).json({
           ok:false,
