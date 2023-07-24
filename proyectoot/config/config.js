@@ -8,7 +8,8 @@ module.exports =
     "database":  process.env.DB_DATABASE,
     "host": process.env.DB_HOST,
     "port": process.env.PORT,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "database_url":"process.env.DATABASE_URL"
   },
   "test": {
     "username": process.env.DB_USER,
